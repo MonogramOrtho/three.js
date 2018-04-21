@@ -287,45 +287,45 @@ THREE.Volume.prototype = {
 		secondDirection = new THREE.Vector3();
 
 		var dimensions = new THREE.Vector3( this.xLength, this.yLength, this.zLength );
-
+		
+		var positionOffsetX = ( volume.RASDimensions[ 0 ] - 1 ) / 2;
+		var positionOffsetY = ( volume.RASDimensions[ 1 ] - 1 ) / 2;
+		var positionOffsetZ = ( volume.RASDimensions[ 2 ] - 1 ) / 2;
 
 		switch ( axis ) {
 
 			case 'x' :
-				axisInIJK.set( 1, 0, 0 );
-				firstDirection.set( 0, 0, - 1 );
-				secondDirection.set( 0, - 1, 0 );
+				axisInIJK.set( -1, 0, 0 );
+				firstDirection.set( 0, 0, 1 );
+				secondDirection.set( 0, 1, 0 );
 				firstSpacing = this.spacing[ 2 ];
 				secondSpacing = this.spacing[ 1 ];
 				IJKIndex = new THREE.Vector3( RASIndex, 0, 0 );
 
 				planeMatrix.multiply( ( new THREE.Matrix4() ).makeRotationY( Math.PI / 2 ) );
-				positionOffset = ( volume.RASDimensions[ 0 ] - 1 ) / 2;
-				planeMatrix.setPosition( new THREE.Vector3( RASIndex - positionOffset, 0, 0 ) );
+				planeMatrix.setPosition( new THREE.Vector3( volume.offset[0] + RASIndex, volume.offset[1] + positionOffsetY, volume.offset[2] + positionOffsetZ ) );
 				break;
 			case 'y' :
-				axisInIJK.set( 0, 1, 0 );
-				firstDirection.set( 1, 0, 0 );
-				secondDirection.set( 0, 0, 1 );
+				axisInIJK.set( 0, -1, 0 );
+				firstDirection.set( -1, 0, 0 );
+				secondDirection.set( 0, 0, -1 );
 				firstSpacing = this.spacing[ 0 ];
 				secondSpacing = this.spacing[ 2 ];
 				IJKIndex = new THREE.Vector3( 0, RASIndex, 0 );
 
-				planeMatrix.multiply( ( new THREE.Matrix4() ).makeRotationX( - Math.PI / 2 ) );
-				positionOffset = ( volume.RASDimensions[ 1 ] - 1 ) / 2;
-				planeMatrix.setPosition( new THREE.Vector3( 0, RASIndex - positionOffset, 0 ) );
+				planeMatrix.multiply( ( new THREE.Matrix4() ).makeRotationX( -Math.PI / 2 ) );
+				planeMatrix.setPosition( new THREE.Vector3( volume.offset[0] + positionOffsetX, volume.offset[1] + RASIndex, volume.offset[2] + positionOffsetZ ) );
 				break;
 			case 'z' :
 			default :
-				axisInIJK.set( 0, 0, 1 );
-				firstDirection.set( 1, 0, 0 );
-				secondDirection.set( 0, - 1, 0 );
+				axisInIJK.set( 0, 0, -1 );
+				firstDirection.set( -1, 0, 0 );
+				secondDirection.set( 0, 1, 0 );
 				firstSpacing = this.spacing[ 0 ];
 				secondSpacing = this.spacing[ 1 ];
 				IJKIndex = new THREE.Vector3( 0, 0, RASIndex );
 
-				positionOffset = ( volume.RASDimensions[ 2 ] - 1 ) / 2;
-				planeMatrix.setPosition( new THREE.Vector3( 0, 0, RASIndex - positionOffset ) );
+				planeMatrix.setPosition( new THREE.Vector3( volume.offset[0] + positionOffsetX, volume.offset[1] + positionOffsetY, volume.offset[2] + RASIndex) );
 				break;
 		}
 

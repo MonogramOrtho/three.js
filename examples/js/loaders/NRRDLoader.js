@@ -337,6 +337,11 @@ THREE.NRRDLoader.prototype = {
 			headerObject.vectors[ 2 ][ 2 ] ) ).length();
 		volume.spacing = [ spacingX, spacingY, spacingZ ];
 
+		// origin
+		volume.origin = new THREE.Vector3( 	parseFloat(headerObject.space_origin[0]),
+							parseFloat(headerObject.space_origin[1]),
+							parseFloat(headerObject.space_origin[2]));
+
 
 		// Create IJKtoRAS matrix
 		volume.matrix = new THREE.Matrix4();
